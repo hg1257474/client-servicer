@@ -1,0 +1,40 @@
+/* pages/register/register.wxss */
+.avatar{
+  width:40vw;
+  height:40vw;
+  margin:17vh auto 5vh;
+}
+.nickName{
+  text-align:center;
+}
+.authorization-btn{
+  margin-top:24vh;
+  width:40vw;
+}
+
+.title{
+  font-size:1em;
+  text-align:center;
+  margin:7vh auto 4vh;
+}
+label {
+  padding: 4vw 0 3vw;
+  color: black;
+  display: block;
+  font-size: 4.5vw;
+  margin-left:3vw;
+}
+
+input, textarea {
+  margin-left:3vw;
+  display: inline-block;
+  font-size: 4vw;
+  color: #595959;
+}
+.submit-btn {
+  margin-top:8vh;
+  background: #1b325f;
+  color: white;
+  width: 94vw;
+  margin-left:1vw;
+}

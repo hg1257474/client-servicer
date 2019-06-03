@@ -1,0 +1,22 @@
+<!--pages/register/register.wxml-->
+<form wx:if="{{isNeedRegister}}" bindsubmit='onSubmit'>
+  <view class="title">请登录服务账户</view>
+
+  <label>账号
+  </label>
+  <input placeholder="未填写" name="userName" />
+  <label>密码
+  </label>
+  <input placeholder='未填写' name="password" />
+  <button form-type="submit" class="submit-btn">登陆</button>
+</form>
+<view wx:if="{{!isNeedRegister}}">
+
+  <view class="avatar">
+    <open-data type="userAvatarUrl"></open-data>
+  </view>
+  <view class="nickName">
+    <open-data type="userNickName" class="nickName"></open-data>
+  </view>
+  <button class="authorization-btn" open-type='getUserInfo' bindgetuserinfo="onGetUserInfo">点击进行授权</button>
+</view>

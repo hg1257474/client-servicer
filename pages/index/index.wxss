@@ -1,0 +1,14 @@
+/**index.wxss**/
+button{
+  text-align:left;
+}
+.name{
+  font-size:5vw;
+}
+.date{
+  font-size:4.25vw;
+}
+.status{
+  float:right;
+  font-size:4.5vw;
+}

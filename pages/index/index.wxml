@@ -1,0 +1,7 @@
+<!--index.wxml-->
+<form bindtap="onTap" bindsubmit='onSubmit' report-submit="true">
+  <button form-type="submit" id="{{item[2]}}" wx:for="{{services}}" wx:key="{{index}}">
+    <view class="newMessage">{{item[1]?item[1]:""}}</view>
+    <view class="name">{{item[0].category+item[0].name+item[0].type}}</view>
+  </button>
+</form>
