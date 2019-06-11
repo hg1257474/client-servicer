@@ -4,7 +4,7 @@
 
   <label>账号
   </label>
-  <input placeholder="未填写" name="userName" />
+  <input placeholder="未填写" name="username" />
   <label>密码
   </label>
   <input placeholder='未填写' name="password" />

@@ -3,7 +3,7 @@
 const app = getApp()
 const io = require("../../utils/weapp.socket.io.js")
 const {
-  serviceUrl,accountUrl
+  serviceUrl
 } = require("../../config/app.js")
 let socket = null
 Page({
@@ -17,33 +17,6 @@ Page({
     console.log(e.detail)
   },
   onReady() {
-    const sessionId = wx.getStorageSync("sessionId")
-    const that=this
-    wx.login({
-      success(res) {
-        wx.request({
-          url: accountUrl.login,
-          method: "POST",
-          data: {
-            sessionId,
-            js_code: res.code
-          },
-          success(res) {
-            console.log(res)
-            if (res.data.tSessionId) wx.navigateTo({
-              url: `/pages/account/account?tSessionId=${res.data.tSessionId}&isNeedRegister=${res.data.isNeedRegister}`,
-            })
-            else {
-              if (res.data !== "already") wx.setStorageSync("sessionId", res.data)
-              that.loggedCb()
-            }
-          }
-        })
-      }
-    })
-  },
-  loggedCb() {
-    console.log(111)
     const that = this
     const {
       services
@@ -53,7 +26,7 @@ Page({
         sessionId: wx.getStorageSync("sessionId")
       }
     })
-    socket.emit("pull","initialization", () => {
+    socket.emit("pull", "initialization", () => {
       socket.on("push", (_services, cb) => {
         console.log(_services)
         if (_services[0] instanceof Array) that.setData({
@@ -72,5 +45,5 @@ Page({
         if (cb) cb()
       })
     })
-  }
+  },
 })
