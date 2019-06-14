@@ -1,6 +1,6 @@
-const url = "http://localhost:7001"//"http://www.huishenghuo.net:7001"
+const url ="http://www.huishenghuo.net:7001"
 exports.accountUrl = url + "/account"
 exports.loginUrl = url + "/servicer/login"
 exports.cacheUrl = url + "/mpCache"
-exports.serviceUrl = url + "/service/customer" //"http://192.168.0.29:7001/static/miniprogram"
+exports.serviceUrl = url + "/service/servicer" //"http://192.168.0.29:7001/static/miniprogram"
 exports.chatUrl = "http://www.huishenghuo.net:3000"//"http://192.168.0.29:3000"

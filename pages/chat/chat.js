@@ -16,14 +16,15 @@ Page({
    */
   onLoad: function(options) {
     console.log(options)
-    try {
-      const sessionId = wx.getStorageSync('sessionId')
-      this.setData({
-        src: `${chatUrl}?sessionId=${sessionId}&chatId=${options.chatId}&formId=${options.formId}&type=servicer`
-      })
-    } catch (e) {
-      // Do something when catch error
+    const body = {
+      sessionId: wx.getStorageSync("sessionId").value,
+      ...options
     }
+    console.log(encodeURIComponent(JSON.stringify(body)))
+    this.setData({
+      src: `${chatUrl}?${encodeURIComponent(JSON.stringify(body))}`
+    })
+
   },
 
   /**

@@ -1,14 +1,84 @@
-/**index.wxss**/
-button{
-  text-align:left;
+/* pages/service/service.wxss */
+.top {
+  height: 32.8vw;
+  width: 100vw;
+  background: #1b325f;
 }
-.name{
-  font-size:5vw;
+
+.banner {
+  width: 93.33vw;
+  height: 47.73vw;
+  display: flex;
+  align-items: center;
+  top: 1.8vw;
+  background: #f26c4f;
+  flex-direction: column;
+  left: 3.33vw;
+  border-radius: 1.33vw;
+  margin: -32vw 3.33vw 4.8vw;
+  justify-content: space-around;
 }
-.date{
-  font-size:4.25vw;
+
+.vip-container {
+  width: 28.53vw;
+  height: 7.87vw;
+  text-align:center;
+  line-height:7.87vw;
+  background: white;
+  border-radius: 1.33vw;
+  margin-bottom: 4vw;
+  font-size: 3.47vw;
+
 }
-.status{
-  float:right;
-  font-size:4.5vw;
+.no-services{
+  text-align:center;
+}
+
+
+.vip-image {
+  width: 4.67vw;
+  height: 4.67vw;
+  margin:0 1.87vw 0 4.13vw;
+  display:inline-block; 
+  vertical-align: middle;
+}
+
+.nickname {
+  font-size: 4.53vw;
+  color: white;
+}
+
+.avatar {
+  width: 20vw;
+  height: 20vw;
+  overflow: hidden;
+  margin-top: 4.27vw;
+  border-radius: 100%;
+}
+.name,.date,.status{
+  display:inline-block;
+}
+.name {
+  margin-left: 3.6vw;
+  font-size: 4.27vw;
+}
+
+.date {
+  margin-left: 11.47vw;
+  font-size: 3.87vw;
+  color: #999;
+}
+
+.status {
+  margin-left: 11.33vw;
+  font-size: 3.87vw;
+  color: #999;
+}
+
+
+button {
+  height: 14.67vw;
+  border-bottom: 1px solid #e6e6e6;
+  padding:0;
+  background:white;
 }

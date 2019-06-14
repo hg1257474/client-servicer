@@ -1,7 +1,20 @@
-<!--index.wxml-->
+<view class="top"></view>
+<view class="banner">
+  <view class="avatar">
+    <open-data type="userAvatarUrl"></open-data>
+  </view>
+  <view class="nickname">
+    <open-data type="userNickName" class="nickName"></open-data>
+  </view>
+  <view class="vip-container">
+    律师
+  </view>
+</view>
+<view wx:if="{{isNoServices}}" class="no-services">当前没有服务</view>
 <form bindtap="onTap" bindsubmit='onSubmit' report-submit="true">
-  <button form-type="submit" id="{{item[2]}}" wx:for="{{services}}" wx:key="{{index}}">
-    <view class="newMessage">{{item[1]?item[1]:""}}</view>
-    <view class="name">{{item[0].category+item[0].name+item[0].type}}</view>
+  <button form-type="submit" data-chatId="{{item[3]}}" id="{{item[3]}}" wx:for="{{services}}" wx:key="{{index}}">
+    <view class="name">{{item[0].category+"-"+item[0].name+"-"+item[0].type}}</view>
+    <view class="date">{{item[1]}}</view>
+    <view class="status">{{item[2]}}</view>
   </button>
 </form>

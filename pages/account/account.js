@@ -30,7 +30,8 @@ Page({
       },
       method: "POST",
       success(res) {
-        if (res.statusCode === "202") {
+        console.log(res)
+        if (res.statusCode === 202) {
           that.getUserInfo()
         } else wx.showToast({
           title: '账户或密码错误',

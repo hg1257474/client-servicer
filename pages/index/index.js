@@ -8,42 +8,52 @@ const {
 let socket = null
 Page({
   data: {
-    services: []
+    services: [],
+    isNoServices: false
   },
   onSubmit(e) {
+    console.log(e)
     wx.navigateTo({
       url: `/pages/chat/chat?chatId=${e.detail.target.id}&formId=${e.detail.formId}`
     })
     console.log(e.detail)
   },
-  onReady() {
+  onReady: function() {
     const that = this
     const {
-      services
-    } = this.data
+      services,
+    } = that.data
     socket = io(serviceUrl, {
       query: {
-        sessionId: wx.getStorageSync("sessionId")
+        sessionId: wx.getStorageSync("sessionId").value
       }
     })
-    socket.emit("pull", "initialization", () => {
-      socket.on("push", (_services, cb) => {
-        console.log(_services)
-        if (_services[0] instanceof Array) that.setData({
-          services: [..._services, ...that.data.services]
+    console.log(1)
+    socket.emit("pull", (_res) => {
+      console.log(_res)
+      if(!_res.length) this.setData({isNoServices:true})
+      const services = _res.map(item => {
+        const date = new Date(item[1])
+        item[1] = `${date.getFullYear()}.${date.getMonth()}.${date.getDate()}`
+        return item
+      })
+
+      that.setData({
+        services
+      })
+      socket.on("push", (service, cb) => {
+        console.log(service)
+        service[1]=new Date(service[1])
+        service[1] = `${service[1].getFullYear()}.${service[1].getMonth()}.${service[1].getDate()}`
+        let index = that.data.services.findIndex(item => item[3] === service[3])
+        if (index !== -1) that.data.services.splice(index, 1)
+        that.data.services.unshift(service)
+        that.setData({
+          services: that.data.services
         })
-        else {
-          console.log("Dsdsdss")
-          let index = that.data.services.findIndex(item => item[2] === services[2])
-          if (index !== -1) that.data.services.splice(index, 1)
-          that.data.services.unshift(_services)
-          console.log(index, that.data._services)
-          that.setData({
-            services: that.data.services
-          })
-        }
         if (cb) cb()
       })
     })
+
   },
 })
