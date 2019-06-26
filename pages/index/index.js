@@ -1,10 +1,9 @@
 //index.js
 //获取应用实例
 const app = getApp()
-const io = require("../../utils/weapp.socket.io.js")
 const {
   serviceUrl
-} = require("../../config/app.js")
+} = require("../../utils/config.js")
 let socket = null
 Page({
   data: {

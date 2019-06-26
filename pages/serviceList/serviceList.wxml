@@ -1,0 +1,14 @@
+<view class="top-bar">
+  <view class="top-tittle">订单</view>
+  <view class="top-date top-status-tag">时间</view>
+  <view class="top-status top-status-tag">状态</view>
+</view>
+
+<view class="service_list_wrapper">
+  <navigator url="/pages/serviceInfo/serviceInfo" class="single_service_data" wx:for="{{services}}" wx:key="{{index}}" >
+    <view class="service_name">{{item[0]}}</view>
+    <view class="service_time sec_info">{{item[1]}}</view>
+    <view class="service_state sec_info">{{item[2]}}</view>
+  </navigator>
+</view>
+<view class="no-services" wx:if="{{!services.length}}">暂时无服务</view>

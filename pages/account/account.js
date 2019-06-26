@@ -1,18 +1,18 @@
 // pages/register/register.js
 const {
-  loginUrl,
-  accountUrl
-} = require("../../config/app.js")
-const callback = (res) => {
+  loginUrl
+} = require("../../utils/config.js")
+const setSessionId = (res) => {
   console.log(res)
-  const sessionId = {
-    value: res.cookies[0].match(/sessionId=([^;]+);/)[1],
-    raw: res.cookies[1].split(";")[0]
+  console.log(res.cookies)
+  if (res.cookies.length>0) {
+    wx.setStorageSync("sessionId", res.cookies[0].split(";")[0])
+  } else if (res.header["Set-Cookie"]) {
+    console.log(res.header["Set-Cookie"])
+    wx.setStorageSync("sessionId", res.header["Set-Cookie"].match(/EGG_SESS=([^;]+)/)[0])
   }
-  wx.setStorageSync("sessionId", sessionId)
-  console.log("ddddddddddddddd")
   wx.redirectTo({
-    url: '/pages/index/index',
+    url: '/pages/serviceList/serviceList',
   })
 }
 Page({
@@ -31,88 +31,36 @@ Page({
       method: "POST",
       success(res) {
         console.log(res)
-        if (res.statusCode === 202) {
-          that.getUserInfo()
-        } else wx.showToast({
+        if (res.statusCode === 401) wx.showToast({
           title: '账户或密码错误',
           icon: "none"
         })
+        else setSessionId(res)
       }
     })
   },
-  onLoad: function(options) {
+  onReady: function() {
     const that = this
-    let sessionId = wx.getStorageSync("sessionId") && wx.getStorageSync("sessionId").raw
+    let sessionId = wx.getStorageSync("sessionId")
     wx.login({
       success: function(res) {
         wx.request({
-          url: loginUrl,
-          method: "POST",
           header: {
             cookie: sessionId
           },
-          data: {
-            jsCode: res.code
-          },
+          method: "POST",
+          url: `${loginUrl}?jsCode=${res.code}`,
           success: function(res) {
-            console.log(res)
-            if (res.statusCode === 202) {
-              that.setData({
-                  openId: res.data
-                }, () =>
-                that.getUserInfo()
-              )
-            } else if (res.statusCode === 201) callback(res)
-            else if (res.statusCode === 401) {
-              that.setData({
-                isNeedRegister: true,
-                openId: res.data
-              })
-            } else wx.redirectTo({
-              url: '/pages/index/index',
+            if (res.statusCode === 401) that.setData({
+              openId: res.data
             })
-          }
-        })
-      }
-    })
-  },
-  getUserInfo() {
-    const that = this
-    wx.getUserInfo({
-      success(res) {
-        wx.request({
-          url: accountUrl,
-          method: "PUT",
-          data: {
-            avatar: res.userInfo.avatarUrl,
-            nickname: res.userInfo.nickName,
-            openId: that.data.openId
+            else setSessionId(res)
           },
-          success(res) {
-            callback(res)
+          fail(res) {
+            console.log("22")
+            console.log(res)
           }
-        })
-      },
-      fail: function() {
-        that.setData({
-          isNeedRegister: false
-        })
-      }
-    })
-  },
-  onGetUserInfo(e) {
-    console.log(e)
-    const that = this
-    wx.request({
-      url: accountUrl,
-      method: "PUT",
-      data: {
-        nickname: e.detail.userInfo.nickName,
-        avatar: e.detail.userInfo.avatarUrl,
-        openId: that.data.openId
-      },
-      success: function(res) {
-        callback(res)
+        });
       }
     })
   }

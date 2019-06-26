@@ -2,7 +2,7 @@
   "pages": [
     "pages/account/account",
     "pages/index/index",
-    "pages/chat/chat"
+    "pages/serviceList/serviceList"
   ],
   "window": {
     "backgroundTextStyle": "light",
