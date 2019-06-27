@@ -1,10 +1,14 @@
 /**app.wxss**/
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} 
+page{height:100%;background:#f2f2f2;}
+.main{width: 100%;height: 100%;}
+.m-t{margin-top: 15px;}
+.m-l{margin-left: 15px;}
+.m-r{margin-right: 15px;}
+.m-b{margin-bottom: 15px;}
+.p-t{padding-top: 15px;}
+.p-l{padding-left: 15px;}
+.p-r{padding-right: 15px;}
+.p-b{padding-bottom: 15px;}
+.text-left{text-align: left;}
+.text-center{text-align: center;}
+.text-right{text-align: right;}

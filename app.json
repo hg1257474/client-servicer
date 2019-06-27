@@ -2,6 +2,7 @@
   "pages": [
     "pages/account/account",
     "pages/index/index",
+    "pages/serviceInfo/serviceInfo",
     "pages/serviceList/serviceList"
   ],
   "window": {
