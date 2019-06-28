@@ -1,6 +1,7 @@
 let {
-  serviceUrl
+  serviceUrl: _serviceUrl
 } = require('../../utils/config.js')
+let serviceUrl = null
 Page({
 
   /**
@@ -55,21 +56,26 @@ Page({
     })
   },
   onSendQuote() {
-    const that=this
+    const that = this
     if (this.data.sendQuoteButton === "报价") wx.request({
       url: `${serviceUrl}/payment`,
-      method:"PUT",
-      header:{
-        cookie:wx.getStorageSync("sessionId")
+      method: "PUT",
+      header: {
+        cookie: wx.getStorageSync("sessionId")
       },
-      data:{
-        fee:this.data.fee
+      data: {
+        fee: this.data.fee
       },
-      success(){
+      success() {
+        wx.showToast({
+          title: '报价成功',
+        })
         that.initial()
       }
     })
-    else this.setData({sendQuoteButton:'报价'})
+    else this.setData({
+      sendQuoteButton: '报价'
+    })
   },
   initial() {
     const that = this
@@ -83,37 +89,70 @@ Page({
         const {
           data
         } = res
+        if (data.processor) data.processorPicked = data.processor
+        if (data.processors) {
+          data.processorPickerRange = data.processor ? data.processors.filter(item => item[1] !== data.processor[1]) : data.processors
+          data.assignServiceButton = "分配"
+        } else data.assignServiceButton = "修改"
+        console.log(data.processorPickerRange)
         if (data.canMakeConclusion) {
           data.conclusion = [null, []]
         }
         if (data.payment) {
-          data.sendQuoteButton = data.payment[1] ? '已报价' : '修改'
+          data.sendQuoteButton = data.payment[1] ? '已支付' : '修改'
         } else data.sendQuoteButton = '报价'
         data.isTextDescriptionType = typeof data.description === 'string'
         that.setData(data)
       }
     })
   },
+  onAssignService(e) {
+    const that = this
+    if (this.data.assignServiceButton === "分配") wx.request({
+      url: `${serviceUrl}/processor`,
+      method: "PUT",
+      header: {
+        cookie: wx.getStorageSync("sessionId")
+      },
+      data: {
+        processorId: this.data.processorPicked[1]
+      },
+      success() {
+        that.initial()
+      }
+    })
+    else {
+      const that = this
+      if (!this.data.processorPickerRange) {
+        wx.request({
+          url: `${_serviceUrl}/processors`,
+          method: "GET",
+          success(res) {
+            const processorPickerRange = res.data.filter(item => item[1] !== that.data.processorPicked[1])
+            that.setData({
+              assignServiceButton: '分配',
+              processorPickerRange
+            })
+          }
+        })
+      }
+    }
+  },
   onLoad: function(options) {
-    serviceUrl = `${serviceUrl}/${options.id}`
+    console.log("onLoad")
+    serviceUrl = `${_serviceUrl}/${options.id}`
     this.initial()
   },
-  radioChange: function(e) {
-    this.setData({
-      radioCheckVal: e.detail.value
-    })
-    console.log('radio发生change事件，携带value值为：', e.detail.value)
-  },
   /*分配律师*/
-  bindPickerChange: function(e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      index: e.detail.value
-    })
-  },
   onConclusionTextChange(e) {
     this.setData({
       concl
+    })
+  },
+  onPickProcessor(e) {
+    console.log(e)
+    this.setData({
+      processorPicked: this.data.processorPickerRange[e.detail.value]
     })
   },
   onEndService() {
@@ -162,5 +201,8 @@ Page({
     this.setData({
       shouldViewConclusion: !this.data.shouldViewConclusion
     })
+  },
+  onGetFormId(e){
+    console.log(e)
   }
 })

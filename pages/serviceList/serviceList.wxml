@@ -5,7 +5,7 @@
 </view>
 
 <view class="service_list_wrapper">
-  <navigator url="/pages/serviceInfo/serviceInfo?id={{item[3]}}" class="single_service_data" wx:for="{{services}}" wx:key="{{index}}" >
+  <navigator url="/pages/serviceInfo/serviceInfo?id={{item[3]}}" class="single_service_data" wx:for="{{services}}" wx:key="{{index}}">
     <view class="service_name">{{item[0]}}</view>
     <view class="service_time sec_info">{{item[1]}}</view>
     <view class="service_state sec_info">{{item[2]}}</view>

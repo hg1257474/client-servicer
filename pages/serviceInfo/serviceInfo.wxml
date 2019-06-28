@@ -1,159 +1,160 @@
-<view class="main p-t">
-  <view class="single_info_wrapper">
-    <image src="/images/set_question/set_question_order_state.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">服务状态</text>
-    <view class="single_info_content">
-      <text class="contract_type">{{status}}</text>
-    </view>
-  </view>
-  <view class="single_info_wrapper">
-    <image src="/images/set_question/set_question_icon_hetong.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">服务名</text>
-    <view class="single_info_content">
-      <text class="contract_type">{{name}}</text>
-    </view>
-  </view>
 
-  <view class="single_info_wrapper" bindtap="onChangeDescriptionShow">
-    <image src="/images/set_question/set_question_icon_note.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">需求描述</text>
-    <view class="single_info_content single_info_content_right" bindtap="hide_user_note" data-state="{{hide_user_note}}">
-      <image src="/images/set_question/{{shouldViewDescription ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
-    </view>
-  </view>
-  <view class='single_info_content' wx:if="{{shouldViewDescription}}">
-    <view class="add_note" wx:if="{{isTextDescriptionType}}">{{description}}</view>
-    <view wx:if="{{!isTextDescriptionType}}" class="upload_flie_wrapper">
-      <view class="upload_flie_tittle text-center">上传文件</view>
-      <view class="upload_flie_list">
-        <view class="upload_flie_data" wx:for="{{description}}">
-          <view class="upload_flie_img_wrapper">
-            <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
-          </view>
-          <view class="upload_flie_data_content">
-            <view class="upload_flie_name">{{item[0]}}</view>
-            <view class="upload_flie_size">{{item[1]}}</view>
-          </view>
-          <view class="upload_flie_function">
-            <button class="upload_flie_btn upload_flie_scan" data-index="{{index}}" bindtap="onPreviewFile">查看</button>
-            <button class="upload_flie_btn upload_flie_down" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
-          </view>
+    <view class="main p-t">
+      <view class="single_info_wrapper">
+        <image src="/images/set_question/set_question_order_state.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">服务状态</text>
+        <view class="single_info_content">
+          <text class="contract_type">{{status}}</text>
         </view>
       </view>
-    </view>
-  </view>
-
-
-  <view class="single_info_wrapper">
-    <image src="/images/set_question/set_question_icon_lx_type.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">预留沟通方式</text>
-    <view class="single_info_content">
-      <radio-group class="radio-group" bindchange="radioChange">
-        <label class="radio_label">
-          <image src="/images/set_question/{{contact.method === 'weChat'?'set_question_icon_wx_active':'set_question_icon_ding_active'}}.png" class="radio_img"></image>
-        </label>
-      </radio-group>
-    </view>
-  </view>
-
-  <view class="single_info_wrapper" bindtap="onChangeContactShow">
-    <image src="/images/set_question/set_question_icon_info.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">预留联系信息</text>
-    <view class="single_info_content single_info_content_right" bindtap="hide_user_info" data-state="{{hide_user_info}}">
-      <image src="/images/set_question/{{shouldViewContact ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
-    </view>
-  </view>
-  <view class="single_info_content" wx:if="{{shouldViewContact}}">
-
-    <view class="single_user_data">
-      <view class="user_name">联系人</view>
-      <view class="user_wirte_wrapper">
-        {{contact.name}}
-      </view>
-    </view>
-
-    <view class="single_user_data">
-      <view class="user_name">电话</view>
-      <view class="user_wirte_wrapper">
-        {{contact.phone}}
-      </view>
-    </view>
-
-    <view class="single_user_data" wx:if="{{contact.method==='weChat'}}">
-      <view class="user_name">微信</view>
-      <view class="user_wirte_wrapper">
-        {{contact.content}}
-      </view>
-    </view>
-
-    <view class="single_user_data" wx:if="{{contact.method==='dingTalk'}}">
-      <view class="user_name">钉钉</view>
-      <view class="user_wirte_wrapper">
-        {{contact.content}}
-      </view>
-    </view>
-
-  </view>
-  <view wx:if="{{payment||canSendQuote}}" class="single_info_wrapper">
-    <image src="/images/set_question/set_question_icon_price.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">给客户报价</text>
-    <view class="single_info_content">
-      <input disabled="{{!sendQuoteButton==='报价'}}" focus="{{sendQuoteButton==='报价'}}" type="number" id="fee" bindblur="onFeeChange" bindplaceholder="金额" class="submit_price_input" value="{{payment[0]}}" />
-      <text>元</text>
-      <button class="quote-send-btn" bindtap="onSendQuote" disabled="{{payment[1]}}">{{sendQuoteButton}}</button>
-    </view>
-  </view>
-
-  <view class="single_info_wrapper" wx:if="{{canAssignService||processor}}">
-    <image src="/images/set_question/set_question_icon_lawer.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">分配律师</text>
-    <view class="single_info_content">
-      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}" class="picker_lawer" style=''>
-        <view class="picker">{{array[index]}}</view>
-        <image src="/images/set_question/set_question_icon_down.png" class="single_info_tittle_img"></image>
-      </picker>
-      <button class="service-assignment-btn" disabled="{{payment[1]}}">{{canIntitiallitePayment&&'报价'}}{{payment[1]?'已支付':'修改'}}</button>
-    </view>
-
-  </view>
-
-  <view class="single_info_wrapper" wx:if="{{conclusion}}" bindtap="onChangeConclusionShow">
-    <image src="/images/set_question/set_question_finish_service.png" class="single_info_tittle_img"></image>
-    <text class="single_info_name">服务总结</text>
-    <view class="single_info_content">
-      <view class="single_info_content single_info_content_right" bindtap="hide_service_finish" data-state="{{hide_service_finish}}">
-        <image src="/images/set_question/{{shouldViewConclusion ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
-      </view>
-    </view>
-  </view>
-  <view class='single_info_content' wx:if="{{shouldViewConclusion}}">
-    <form bindsubmit='onMakeConclusion'>
-      <textarea name="text" placeholder="请输入服务总结" class="service_finish" value="{{conclusion[0]}}"></textarea>
-      <view class="upload_flie_wrapper">
-        <view class="upload_flie_tittle text-center">上传文件</view>
-        <view class="upload_flie_content">
-          <button class="upload_flie_btn m-r">选择文件</button>
-          <text class="upload_flie_tips">不能上传大于10M的文件</text>
+      <view class="single_info_wrapper">
+        <image src="/images/set_question/set_question_icon_hetong.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">服务名</text>
+        <view class="single_info_content">
+          <text class="contract_type">{{name}}</text>
         </view>
-        <view class="upload_flie_list">
-          <view class="upload_flie_data" wx:for="{{conclusion[1]}}" wx:key="{{index}}">
-            <view class="upload_flie_img_wrapper">
-              <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
-            </view>
-            <view class="upload_flie_data_content">
-              <view class="upload_flie_name">{{item[0]}}</view>
-              <view class="upload_flie_size">{{item[1]}}</view>
-            </view>
-            <view class="upload_flie_close_wrapper" data-id="{{item[2]}}" bindtap="onDeleteFile">
-              <image src="/images/set_question/set_question_icon_close.png" class="upload_flie_close"></image>
+      </view>
+
+      <view class="single_info_wrapper" bindtap="onChangeDescriptionShow">
+        <image src="/images/set_question/set_question_icon_note.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">需求描述</text>
+        <view class="single_info_content single_info_content_right">
+          <image src="/images/set_question/{{shouldViewDescription ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
+        </view>
+      </view>
+      <view class='single_info_content' wx:if="{{shouldViewDescription}}">
+        <view class="add_note" wx:if="{{isTextDescriptionType}}">{{description}}</view>
+        <view wx:if="{{!isTextDescriptionType}}" class="upload_flie_wrapper">
+          <view class="upload_flie_tittle text-center">上传文件</view>
+          <view class="upload_flie_list">
+            <view class="upload_flie_data" wx:for="{{description}}">
+              <view class="upload_flie_img_wrapper">
+                <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
+              </view>
+              <view class="upload_flie_data_content">
+                <view class="upload_flie_name">{{item[0]}}</view>
+                <view class="upload_flie_size">{{item[1]}}</view>
+              </view>
+              <view class="upload_flie_function">
+                <button class="upload_flie_btn upload_flie_scan" data-index="{{index}}" bindtap="onPreviewFile">查看</button>
+                <button class="upload_flie_btn upload_flie_down" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
+              </view>
             </view>
           </view>
         </view>
       </view>
-      <button wx:if="{{canMakeConclusion}}" form-type='submit' class="submit_price">完结服务</button>
 
-    </form>
-  </view>
 
-  <button bindtap="onEndService" wx:if="{{canEndService}}" class="submit_price">完结服务</button>
-</view>
+      <view class="single_info_wrapper">
+        <image src="/images/set_question/set_question_icon_lx_type.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">预留沟通方式</text>
+        <view class="single_info_content">
+          <radio-group class="radio-group" bindchange="radioChange">
+            <label class="radio_label">
+              <image src="/images/set_question/{{contact.method === 'weChat'?'set_question_icon_wx_active':'set_question_icon_ding_active'}}.png" class="radio_img"></image>
+            </label>
+          </radio-group>
+        </view>
+      </view>
+
+      <view class="single_info_wrapper" bindtap="onChangeContactShow">
+        <image src="/images/set_question/set_question_icon_info.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">预留联系信息</text>
+        <view class="single_info_content single_info_content_right" bindtap="hide_user_info" data-state="{{hide_user_info}}">
+          <image src="/images/set_question/{{shouldViewContact ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
+        </view>
+      </view>
+      <view class="single_info_content" wx:if="{{shouldViewContact}}">
+
+        <view class="single_user_data">
+          <view class="user_name">联系人</view>
+          <view class="user_wirte_wrapper">
+            {{contact.name}}
+          </view>
+        </view>
+
+        <view class="single_user_data">
+          <view class="user_name">电话</view>
+          <view class="user_wirte_wrapper">
+            {{contact.phone}}
+          </view>
+        </view>
+
+        <view class="single_user_data" wx:if="{{contact.method==='weChat'}}">
+          <view class="user_name">微信</view>
+          <view class="user_wirte_wrapper">
+            {{contact.content}}
+          </view>
+        </view>
+
+        <view class="single_user_data" wx:if="{{contact.method==='dingTalk'}}">
+          <view class="user_name">钉钉</view>
+          <view class="user_wirte_wrapper">
+            {{contact.content}}
+          </view>
+        </view>
+
+      </view>
+      <view wx:if="{{payment||canSendQuote}}" class="single_info_wrapper">
+        <image src="/images/set_question/set_question_icon_price.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">给客户报价</text>
+        <view class="single_info_content">
+          <input disabled="{{!sendQuoteButton==='报价'}}" focus="{{sendQuoteButton==='报价'}}" type="number" id="fee" bindblur="onFeeChange" bindplaceholder="金额" class="submit_price_input" value="{{payment[0]}}" />
+          <text>元</text>
+          <button wx:if="{{!payment||!payment[1]}}" class="quote-send-btn" bindtap="onSendQuote" disabled="{{payment[1]}}">{{sendQuoteButton}}</button>
+        </view>
+      </view>
+
+      <view class="single_info_wrapper" wx:if="{{processorPickerRange||processor}}">
+        <image src="/images/set_question/set_question_icon_lawer.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">分配律师</text>
+        <view class="single_info_content">
+          <picker bindchange="onPickProcessor" range="{{processorPickerRange}}" class="picker_lawer" disabled="{{assignServiceButton!=='分配'}}" range-key="0">
+            <view class="picker">{{processorPicked?processorPicked[0]:"请选择"}}</view>
+            <image wx:if="{{assignServiceButton==='分配'}}" src="/images/set_question/set_question_icon_down.png" class="single_info_tittle_img"></image>
+          </picker>
+          <button wx:if="{{status!=='已完结' }}" bindtap="onAssignService" class="service-assignment-btn">{{assignServiceButton}}</button>
+        </view>
+
+      </view>
+
+      <view class="single_info_wrapper" wx:if="{{conclusion}}" bindtap="onChangeConclusionShow">
+        <image src="/images/set_question/set_question_finish_service.png" class="single_info_tittle_img"></image>
+        <text class="single_info_name">服务总结</text>
+        <view class="single_info_content">
+          <view class="single_info_content single_info_content_right" bindtap="hide_service_finish" data-state="{{hide_service_finish}}">
+            <image src="/images/set_question/{{shouldViewConclusion ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
+          </view>
+        </view>
+      </view>
+      <view class='single_info_content' wx:if="{{shouldViewConclusion}}">
+
+        <textarea name="text" placeholder="请输入服务总结" class="service_finish" value="{{conclusion[0]}}"></textarea>
+        <view class="upload_flie_wrapper">
+          <view class="upload_flie_tittle text-center">上传文件</view>
+          <view class="upload_flie_content">
+            <button class="upload_flie_btn m-r">选择文件</button>
+            <text class="upload_flie_tips">不能上传大于10M的文件</text>
+          </view>
+          <view class="upload_flie_list">
+            <view class="upload_flie_data" wx:for="{{conclusion[1]}}" wx:key="{{index}}">
+              <view class="upload_flie_img_wrapper">
+                <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
+              </view>
+              <view class="upload_flie_data_content">
+                <view class="upload_flie_name">{{item[0]}}</view>
+                <view class="upload_flie_size">{{item[1]}}</view>
+              </view>
+              <view class="upload_flie_close_wrapper" data-id="{{item[2]}}" bindtap="onDeleteFile">
+                <image src="/images/set_question/set_question_icon_close.png" class="upload_flie_close"></image>
+              </view>
+            </view>
+          </view>
+        </view>
+        <button wx:if="{{canMakeConclusion}}" bindtap='onMakeConclusion' class="submit_price">完结服务</button>
+
+
+      </view>
+
+      <button bindtap="onEndService" wx:if="{{canEndService}}" class="submit_price">完结服务</button>
+    </view>

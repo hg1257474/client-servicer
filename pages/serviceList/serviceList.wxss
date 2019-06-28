@@ -1,20 +1,121 @@
 /* pages/service/service.wxss */
-page{background:#f2f2f2;}
-.top-bar{display:flex;background-color: #f26c4f;color: #fff;padding:8px 5px; }
-.top-bar .top-tittle{flex: 2;}
-.top-bar .top-date{}
-.top-bar .top-status-tag{margin:0 3vw;background:#3A89C9;color:#fff;padding:0px 14px;border-radius:14px;font-size:4vw;}
-.top-bar .top-status{}
-.name{margin-left: 3.6vw;font-size: 4.27vw;}
-.no-services{display:block;text-align:center;line-height: 2em;}
-.date{margin-left: 11.47vw;font-size: 3.87vw;color: #999;}
-.status{margin-left: 11.33vw;font-size: 3.87vw;color: #999;}
-view{display: inline-block;}
-button{height: 14.67vw;border-bottom: 1px solid #e6e6e6;padding:0;background:white;}
+
+page {
+  background: #f2f2f2;
+}
+
+.top-bar {
+  display: flex;
+  background-color: #f26c4f;
+  color: #fff;
+  padding: 8px 5px;
+}
+
+.top-bar .top-tittle {
+  flex: 2;
+}
+
+.top-bar .top-date {
+}
+
+.top-bar .top-status-tag {
+  margin: 0 3vw;
+  background: #3a89c9;
+  color: #fff;
+  padding: 0px 14px;
+  border-radius: 14px;
+  font-size: 4vw;
+}
+
+.top-bar .top-status {
+}
+
+.name {
+  margin-left: 3.6vw;
+  font-size: 4.27vw;
+}
+
+.no-services {
+  display: block;
+  text-align: center;
+  line-height: 2em;
+}
+
+.date {
+  margin-left: 11.47vw;
+  font-size: 3.87vw;
+  color: #999;
+}
+
+.status {
+  margin-left: 11.33vw;
+  font-size: 3.87vw;
+  color: #999;
+}
+
+view {
+  display: inline-block;
+}
+
+button {
+  height: 14.67vw;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 0;
+  background: white;
+}
+
 /*service_list_wrapper*/
-.service_list_wrapper{display: block;margin-top: 5vw;}
-.service_list_wrapper .single_service_data{border-bottom: 1px solid #E6E6E6;display: flex;background: #fff;padding: 3vw 2vw;}
-.service_list_wrapper .single_service_data .service_name{color: #383838;flex: 2;font-size:16px;}
-.service_list_wrapper .single_service_data .service_time{}
-.service_list_wrapper .single_service_data .service_state{}
-.service_list_wrapper .single_service_data .sec_info{color:#999;display:flex;justify-content:center;align-items:center;font-size:16px;margin: 0 3vw;}
+
+.service_list_wrapper {
+  display: block;
+  margin-top: 5vw;
+}
+
+.service_list_wrapper .single_service_data {
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  background: #fff;
+  padding: 3vw 2vw;
+}
+
+.service_list_wrapper .single_service_data .service_name {
+  color: #383838;
+  flex: 2;
+  font-size: 16px;
+}
+
+.service_list_wrapper .single_service_data .service_time {
+}
+
+.service_list_wrapper .single_service_data .service_state {
+}
+
+.service_list_wrapper .single_service_data .sec_info {
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  margin: 0 3vw;
+}
+
+.get-formid {
+  height: 0;
+  width: 0;
+  position: relative;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 14px;
+  padding-right: 14px;
+  box-sizing: border-box;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  line-height: 2.55555556;
+  border-radius: 5px;
+  -webkit-tap-highlight-color: transparent;
+  overflow: auto;
+  color: none;
+  background-color: none;
+}
