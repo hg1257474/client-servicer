@@ -3,7 +3,10 @@
     "pages/account/account",
     "pages/index/index",
     "pages/serviceInfo/serviceInfo",
-    "pages/serviceList/serviceList"
+    "pages/serviceList/serviceList",
+    "pages/fileUpload/fileUpload",
+    "pages/fileDownload/fileDownload",
+    "pages/file/file"
   ],
   "window": {
     "backgroundTextStyle": "light",

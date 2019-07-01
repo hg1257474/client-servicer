@@ -1,7 +1,11 @@
 let {
-  serviceUrl: _serviceUrl
+  serviceUrl: _serviceUrl,
+  fileUploadUrl
 } = require('../../utils/config.js')
 let serviceUrl = null
+let serviceId = null
+let serviceFileUrl = null
+let tempFileId = null
 Page({
 
   /**
@@ -138,9 +142,39 @@ Page({
       }
     }
   },
+  onPreviewFile(e) {
+    console.log(e)
+    const index = e.currentTarget.dataset.index
+    const type = this.data.description[index][0].slice(-4).includes(".") ? this.data.description[index][0].slice(-3) : this.data.description[index][0].slice(-4)
+    console.log(type)
+    if (["png", "jpg", "gif"].includes(type)) {
+      wx.previewImage({
+        urls: [`${serviceFileUrl}/${e.currentTarget.dataset.type==='conclusion'?'conclusion':'file'}/${index}`]
+      })
+    } else {
+      wx.downloadFile({
+        url: `${serviceFileUrl}/file/${index}`,
+        success(res) {
+          console.log(res)
+          wx.openDocument({
+            fileType: type,
+            filePath: res.tempFilePath,
+          })
+        }
+      })
+    }
+  },
+  onDownloadFile(e) {
+    const index = e.currentTarget.dataset.index
+    wx.navigateTo({
+      url: `/pages/file/file?id=${serviceId}&type=download&target=${e.currentTarget.dataset.type}&index=${index}`
+    })
+  },
   onLoad: function(options) {
     console.log("onLoad")
+    serviceId = options.id
     serviceUrl = `${_serviceUrl}/${options.id}`
+    serviceFileUrl = `${serviceUrl}/${options.id}`
     this.initial()
   },
   /*分配律师*/
@@ -155,10 +189,41 @@ Page({
       processorPicked: this.data.processorPickerRange[e.detail.value]
     })
   },
+  onDeleteFile: function(e) {
+    const that = this
+    const id = e.currentTarget.dataset.id
+    wx.request({
+      url: fileUploadUrl + "/" + id,
+      method: "DELETE",
+      success(res) {
+        const files = that.data.conclusion[1].filter(item => item[2] !== id)
+        that.setData({
+          "conclusion[1]": files
+        })
+      }
+    })
+  },
+  onChooseFile: function(options) {
+    const that = this
+    wx.request({
+      url: fileUploadUrl,
+      method: "POST",
+      success(res) {
+        console.log(res)
+        tempFileId = res.data
+        console.log("f")
+        wx.navigateTo({
+          url: "/pages/fileUpload/fileUpload?id=" + res.data
+        })
+
+      }
+    })
+  },
   onEndService() {
     const that = this
     wx.request({
       url: `${serviceUrl}/status`,
+      method: "PUT",
       success(res) {
         that.initial()
       }
@@ -167,13 +232,14 @@ Page({
   onMakeConclusion() {
     const that = this
     wx.request({
-      url: serviceUrl,
+      url: serviceUrl + "/conclusion",
+      method: "PUT",
       data: {
         makeConclusion: true,
-
+        conclusion: that.data.conclusion
       },
       success(res) {
-        that.setData(res.data)
+        that.initial()
       }
     })
   },
@@ -181,6 +247,29 @@ Page({
     this.setData({
       shouldViewDescription: !this.data.shouldViewDescription
     })
+  },
+  onShow() {
+    const that = this
+    if (tempFileId) {
+      wx.request({
+        url: fileUploadUrl + "/summary/" + tempFileId,
+        method: "GET",
+        success(res) {
+          console.log(res.data)
+          console.log(that.data)
+          res.data.push(tempFileId)
+          console.log(that.data.files)
+          that.data.conclusion[1].push(res.data)
+          tempFileId = null
+          console.log(that.data.conclusion)
+          const newConclusion = that.data.conclusion.map(item => item)
+          console.log(newConclusion)
+          that.setData({
+            conclusion: newConclusion
+          })
+        }
+      })
+    }
   },
   onChangeProcessorShow() {
     this.setData({
@@ -201,8 +290,5 @@ Page({
     this.setData({
       shouldViewConclusion: !this.data.shouldViewConclusion
     })
-  },
-  onGetFormId(e){
-    console.log(e)
   }
 })
