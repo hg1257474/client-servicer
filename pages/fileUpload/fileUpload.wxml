@@ -1,2 +1,2 @@
 <!--pages/fileSubmit/fileSubmit.wxml-->
-<web-view src="{{src}}"></web-view>
+<web-view src="{{'http://192.168.0.29:7001/download_page'}}"></web-view>

@@ -1,10 +1,10 @@
 {
   "pages": [
     "pages/account/account",
+    "pages/fileUpload/fileUpload",
     "pages/index/index",
     "pages/serviceInfo/serviceInfo",
     "pages/serviceList/serviceList",
-    "pages/fileUpload/fileUpload",
     "pages/fileDownload/fileDownload",
     "pages/file/file"
   ],
