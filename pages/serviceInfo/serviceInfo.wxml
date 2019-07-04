@@ -21,7 +21,7 @@
       <image src="/images/set_question/{{shouldViewDescription ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
     </view>
   </view>
-  <view class='single_info_content' wx:if="{{shouldViewDescription}}">
+  <view class='single_info_content text-file-container' wx:if="{{shouldViewDescription}}">
     <view class="add_note" wx:if="{{isTextDescriptionType}}">{{description}}</view>
     <view wx:if="{{!isTextDescriptionType}}" class="upload_flie_wrapper">
       <view class="upload_flie_tittle text-center">上传文件</view>
@@ -153,7 +153,7 @@
       <button bindtap='onMakeConclusion' class="submit_price">提交总结</button>
 
     </view>
-    <view class='single_info_content' wx:if="{{!canMakeConclusion}}">
+    <view class='single_info_content text-file-container' wx:if="{{!canMakeConclusion}}">
       <view class="add_note" wx:if="{{conclusion}}">{{conclusion[0]}}</view>
       <view wx:if="{{conclusion[1].length}}" class="upload_flie_wrapper">
         <view class="upload_flie_tittle text-center">上传文件</view>

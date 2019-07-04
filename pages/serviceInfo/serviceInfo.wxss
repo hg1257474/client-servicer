@@ -41,6 +41,10 @@
   color: #898989;
   border: 1px solid #e0e0e0;
   margin: 10px auto;
+  margin-top: 0;
+}
+.text-file-container:{
+  padding-top:5vw;
 }
 
 .single_info_content .add_note::placeholder,
