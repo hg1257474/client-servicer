@@ -43,7 +43,7 @@
   margin: 10px auto;
   margin-top: 0;
 }
-.text-file-container:{
+.text-file-container{
   padding-top:5vw;
 }
 
