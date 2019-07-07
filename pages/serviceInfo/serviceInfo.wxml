@@ -1,3 +1,10 @@
+<wxs module="lodash">
+  var getTruncatedFilename = function(filename) {
+    return filename.length > 18 ? (filename.slice(0, 6) + "..." + filename.slice(-10)) : filename
+  }
+
+  module.exports.getTruncatedFilename = getTruncatedFilename;
+</wxs>
 <view class="main p-t">
   <view class="single_info_wrapper">
     <image src="/images/set_question/set_question_order_state.png" class="single_info_tittle_img"></image>
@@ -31,7 +38,7 @@
             <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
           </view>
           <view class="upload_flie_data_content">
-            <view class="upload_flie_name">{{item[0]}}</view>
+            <view class="upload_flie_name">{{lodash.getTruncatedFilename(item[0])}}</view>
             <view class="upload_flie_size">{{item[1]}}</view>
           </view>
           <view class="upload_flie_function">
@@ -154,7 +161,7 @@
 
     </view>
     <view class='single_info_content text-file-container' wx:if="{{!canMakeConclusion}}">
-      <view class="add_note" wx:if="{{conclusion}}">{{conclusion[0]}}</view>
+      <view class="add_note" wx:if="{{conclusion[0]}}">{{conclusion[0]}}</view>
       <view wx:if="{{conclusion[1].length}}" class="upload_flie_wrapper">
         <view class="upload_flie_tittle text-center">上传文件</view>
         <view class="upload_flie_list">
@@ -163,7 +170,7 @@
               <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
             </view>
             <view class="upload_flie_data_content">
-              <view class="upload_flie_name">{{item[0]}}</view>
+              <view class="upload_flie_name">{{lodash.getTruncatedFilename(item[0])}}</view>
               <view class="upload_flie_size">{{item[1]}}</view>
             </view>
             <view class="upload_flie_function">

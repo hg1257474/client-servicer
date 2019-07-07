@@ -5,11 +5,18 @@ const {
 const setSessionId = (res) => {
   console.log(res)
   console.log(res.cookies)
-  if (res.cookies.length>0) {
-    wx.setStorageSync("sessionId", res.cookies[0].split(";")[0])
-  } else if (res.header["Set-Cookie"]) {
-    console.log(res.header["Set-Cookie"])
-    wx.setStorageSync("sessionId", res.header["Set-Cookie"].match(/EGG_SESS=([^;]+)/)[0])
+  if (res.cookies && res.cookies.length) {
+    if (res.cookies[0].value) wx.setStorageSync("sessionId", `EGG_SESS=${res.cookies[0].value}`)
+    else wx.setStorageSync("sessionId", res.cookies[0].split(";")[0])
+  }
+  else {
+    for (let key in res.header) {
+      console.log(key.toLowerCase())
+      if (key.toLowerCase() === "set-cookie") {
+        const _temp = res.header[key]
+        wx.setStorageSync("sessionId", _temp.match(/EGG_SESS=[^;]+/)[0])
+      }
+    }
   }
   wx.redirectTo({
     url: '/pages/serviceList/serviceList',

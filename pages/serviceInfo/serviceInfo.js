@@ -6,6 +6,13 @@ let serviceUrl = null
 let serviceId = null
 let serviceFileUrl = null
 let tempFileId = null
+const initialData = {
+  shouldViewDescription: false,
+  shouldViewContact: false,
+  shouldViewProcessor: false,
+  shouldViewComment: false,
+  shouldViewConclusion: false,
+}
 Page({
 
   /**
@@ -20,33 +27,6 @@ Page({
     shouldViewProcessor: false,
     shouldViewComment: false,
     shouldViewConclusion: false,
-  },
-  datas: {
-    description: "asdddddddddddddddddd",
-    isTextDescriptionType: true,
-    shouldViewDescription: true,
-    shouldViewContact: true,
-    shouldViewProcessor: true,
-    shouldViewComment: true,
-    shouldViewConclusion: true,
-    processor: {
-      name: "dsdsd",
-      serviceTotal: 122,
-      grade: 323,
-      expert: '餐饮服务、合同咨询'
-    },
-    status: "待回复",
-    name: "合同-咨询",
-    contact: {
-      name: "dsdsdsdsds",
-      phone: 2312312312,
-      method: "dingTalk",
-      content: "dsdsds"
-    },
-    payment: [3232,
-      true
-    ],
-    comment: [1, 2, 3, "dsdsds"],
   },
   onChoose(e) {
     console.log(e)
@@ -106,7 +86,7 @@ Page({
           data.sendQuoteButton = data.payment[1] ? '已支付' : '修改'
         } else data.sendQuoteButton = '报价'
         data.isTextDescriptionType = typeof data.description === 'string'
-        that.setData(data)
+        that.setData({...initialData,...data})
       }
     })
   },
@@ -221,6 +201,7 @@ Page({
   },
   onEndService() {
     const that = this
+
     wx.request({
       url: `${serviceUrl}/status`,
       method: "PUT",

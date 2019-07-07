@@ -4,9 +4,7 @@
     "pages/fileUpload/fileUpload",
     "pages/index/index",
     "pages/serviceInfo/serviceInfo",
-    "pages/serviceList/serviceList",
-    "pages/fileDownload/fileDownload",
-    "pages/file/file"
+    "pages/serviceList/serviceList"
   ],
   "window": {
     "backgroundTextStyle": "light",
