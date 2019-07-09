@@ -12,6 +12,8 @@ const initialData = {
   shouldViewProcessor: false,
   shouldViewComment: false,
   shouldViewConclusion: false,
+  canMakeConclusion: false,
+  canEndService:false
 }
 Page({
 
@@ -27,6 +29,8 @@ Page({
     shouldViewProcessor: false,
     shouldViewComment: false,
     shouldViewConclusion: false,
+    canMakeConclusion:false,
+    canEndService: false
   },
   onChoose(e) {
     console.log(e)
@@ -209,6 +213,10 @@ Page({
         that.initial()
       }
     })
+  },
+  onMakeConclusionText(e){
+    console.log(e)
+    this.setData({"conclusion[0]":e.detail.value})
   },
   onMakeConclusion() {
     const that = this

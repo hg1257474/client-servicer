@@ -33,7 +33,7 @@
     <view wx:if="{{!isTextDescriptionType}}" class="upload_flie_wrapper">
       <view class="upload_flie_tittle text-center">上传文件</view>
       <view class="upload_flie_list">
-        <view class="upload_flie_data" wx:for="{{description}}">
+        <view class="upload_flie_data" wx:for="{{description}}" wx:key="{{index}}">
           <view class="upload_flie_img_wrapper">
             <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
           </view>
@@ -66,7 +66,7 @@
   <view class="single_info_wrapper" bindtap="onChangeContactShow">
     <image src="/images/set_question/set_question_icon_info.png" class="single_info_tittle_img"></image>
     <text class="single_info_name">预留联系信息</text>
-    <view class="single_info_content single_info_content_right" bindtap="hide_user_info" data-state="{{hide_user_info}}">
+    <view class="single_info_content single_info_content_right">
       <image src="/images/set_question/{{shouldViewContact ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
     </view>
   </view>
@@ -128,12 +128,12 @@
     <image src="/images/set_question/set_question_finish_service.png" class="single_info_tittle_img"></image>
     <text class="single_info_name">服务总结</text>
     <view class="single_info_content">
-      <view class="single_info_content single_info_content_right" bindtap="hide_service_finish" data-state="{{hide_service_finish}}">
-        <image src="/images/set_question/{{shouldViewConclusion ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
+      <view class="single_info_content single_info_content_right">
+        <image wx:if="{{!canMakeConclusion&&conclusion}}" src="/images/set_question/{{shouldViewConclusion ? 'set_question_icon_up.png':'set_question_icon_down.png' }}" class="single_info_tittle_img"></image>
       </view>
     </view>
   </view>
-  <view class='single_info_content' wx:if="{{shouldViewConclusion}}">
+  <view class='single_info_content' wx:if="{{shouldViewConclusion||canMakeConclusion}}">
     <view wx:if="{{canMakeConclusion}}">
       <textarea name="text" placeholder="请输入服务总结" bindinput="onMakeConclusionText" class="service_finish" value="{{conclusion[0]}}"></textarea>
       <view class="upload_flie_wrapper">
