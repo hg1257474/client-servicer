@@ -1,6 +1,6 @@
 // pages/register/register.js
 const {
-  loginUrl
+  LOGIN_URL
 } = require("../../utils/config.js")
 const setSessionId = (res) => {
   console.log(res)
@@ -8,8 +8,7 @@ const setSessionId = (res) => {
   if (res.cookies && res.cookies.length) {
     if (res.cookies[0].value) wx.setStorageSync("sessionId", `EGG_SESS=${res.cookies[0].value}`)
     else wx.setStorageSync("sessionId", res.cookies[0].split(";")[0])
-  }
-  else {
+  } else {
     for (let key in res.header) {
       console.log(key.toLowerCase())
       if (key.toLowerCase() === "set-cookie") {
@@ -29,7 +28,7 @@ Page({
   onSubmit(e) {
     const that = this
     wx.request({
-      url: loginUrl,
+      url: LOGIN_URL,
       data: {
         openId: this.data.openId,
         username: e.detail.value.username,
@@ -56,7 +55,10 @@ Page({
             cookie: sessionId
           },
           method: "POST",
-          url: `${loginUrl}?jsCode=${res.code}`,
+          url: LOGIN_URL,
+          data: {
+            jsCode: res.code
+          },
           success: function(res) {
             if (res.statusCode === 401) that.setData({
               openId: res.data

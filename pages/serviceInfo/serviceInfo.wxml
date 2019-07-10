@@ -148,7 +148,7 @@
               <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
             </view>
             <view class="upload_flie_data_content">
-              <view class="upload_flie_name">{{item[0]}}</view>
+              <view class="upload_flie_name">{{lodash.getTruncatedFilename(item[0])}}</view>
               <view class="upload_flie_size">{{item[1]}}</view>
             </view>
             <view class="upload_flie_close_wrapper" data-id="{{item[2]}}" bindtap="onDeleteFile">
