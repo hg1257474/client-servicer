@@ -42,8 +42,8 @@
             <view class="upload_flie_size">{{item[1]}}</view>
           </view>
           <view class="upload_flie_function">
-            <button class="upload_flie_btn upload_flie_scan" data-index="{{index}}" bindtap="onPreviewFile">查看</button>
-            <button class="upload_flie_btn upload_flie_down" data-type="description" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
+            <button class="upload_flie_btn upload_flie_scan" data-type="description" data-index="{{index}}" bindtap="onPreviewFile">查看</button>
+            <button wx:if="{{false}}" class="upload_flie_btn upload_flie_down" data-type="description" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
           </view>
         </view>
       </view>
@@ -105,9 +105,9 @@
     <image src="/images/set_question/set_question_icon_price.png" class="single_info_tittle_img"></image>
     <text class="single_info_name">给客户报价</text>
     <view class="single_info_content">
-      <input disabled="{{!sendQuoteButton==='报价'}}" focus="{{sendQuoteButton==='报价'}}" type="number" id="fee" bindblur="onFeeChange" bindplaceholder="金额" class="submit_price_input" value="{{payment[0]}}" />
+      <input disabled="{{sendQuoteButton!=='报价'}}" focus="{{sendQuoteButton==='报价'}}" type="number" id="fee" bindblur="onFeeChange" bindplaceholder="金额" class="submit_price_input" value="{{payment[0]}}" />
       <text>元</text>
-      <button wx:if="{{!payment||!payment[1]}}" class="quote-send-btn" bindtap="onSendQuote" disabled="{{payment[1]}}">{{sendQuoteButton}}</button>
+      <button wx:if="{{!payment||!payment[1]}}" class="quote-send-btn" bindtap="onSendQuote" disabled="{{isSendQuoting||payment[1]}}">{{sendQuoteButton}}</button>
     </view>
   </view>
 
@@ -123,7 +123,74 @@
     </view>
 
   </view>
+  <view class="single_info_wrapper" wx:if="{{comment.length>0}}" bindtap="onChangeCommentShow">
+    <image src="/images/set_question/set_question_evaluate.png" class="single_info_tittle_img"></image>
+    <text class="single_info_name">评价</text>
+    <view class="single_info_content single_info_content_right">
+      <image src="/images/set_question/{{shouldViewComment? 'set_question_icon_up.png':'set_question_icon_down.png'}}" class="single_info_tittle_img"></image>
+    </view>
+  </view>
+  <view wx:if="{{shouldViewComment}}">
+    <view class="single_info_content">
 
+      <view class="single_user_data single_evaluate_data">
+        <view class="user_name evaluate_tittle_w">
+          <view class="evaluate_icon_w">
+            <image src="/images/set_question/set_question_evaluate_1.png" class="evaluate_icon"></image>
+          </view>
+          <text class="evaluate_tittle">问题解决程度</text>
+        </view>
+        <view class="user_wirte_wrapper evaluate_content">
+          <view wx:for="{{[1,2,3,4,5]}}" wx:key="" data-index="{{index}}" bindtap='onRate1' class="strat_view">
+            <image src="{{index<=comment[0]?'/images/set_question/start-active.png':'/images/set_question/start.png'}}" class=" strat_view_img "></image>
+          </view>
+        </view>
+      </view>
+
+      <view class="single_user_data single_evaluate_data">
+        <view class="user_name evaluate_tittle_w">
+          <view class="evaluate_icon_w">
+            <image src="/images/set_question/set_question_evaluate_2.png" class="evaluate_icon"></image>
+          </view>
+          <text class="evaluate_tittle">问题回复速度</text>
+        </view>
+        <view class="user_wirte_wrapper evaluate_content">
+          <view wx:for="{{[1,2,3,4,5]}}" wx:key="" data-index="{{index}}" bindtap='onRate2' class="strat_view">
+            <image src="{{index<=comment[1]?'/images/set_question/start-active.png':'/images/set_question/start.png'}}" class=" strat_view_img "></image>
+          </view>
+        </view>
+      </view>
+
+      <view class="single_user_data single_evaluate_data">
+        <view class="user_name evaluate_tittle_w">
+          <view class="evaluate_icon_w">
+            <image src="/images/set_question/set_question_evaluate_3.png" class="evaluate_icon"></image>
+          </view>
+          <text class="evaluate_tittle">总体满意程度</text>
+        </view>
+        <view class="user_wirte_wrapper evaluate_content">
+          <view wx:for="{{[1,2,3,4,5]}}" wx:key="" data-index="{{index}}" bindtap='onRate3' class="strat_view">
+            <image src="{{index<=comment[2]?'/images/set_question/start-active.png':'/images/set_question/start.png'}}" class=" strat_view_img "></image>
+          </view>
+        </view>
+      </view>
+
+      <view class="single_user_data single_evaluate_data ">
+        <view class="user_name evaluate_tittle_w ">
+          <view class="evaluate_icon_w ">
+            <image src="/images/set_question/set_question_evaluate_4.png " class="evaluate_icon "></image>
+          </view>
+          <text class="evaluate_tittle ">详细评价意见</text>
+        </view>
+        <view class="user_wirte_wrapper evaluate_content ">
+        </view>
+      </view>
+      <view class="single_user_data_content ">
+        <textarea disabled="{{!canMakeComment}}" bindinput="onMakeCommentDetail" placeholder="请输入您的详细评价意见 " class="add_advise " value="{{comment[3]}}"></textarea>
+      </view>
+
+    </view>
+  </view>
   <view class="single_info_wrapper" wx:if="{{conclusion}}" bindtap="onChangeConclusionShow">
     <image src="/images/set_question/set_question_finish_service.png" class="single_info_tittle_img"></image>
     <text class="single_info_name">服务总结</text>
@@ -165,7 +232,7 @@
       <view wx:if="{{conclusion[1].length}}" class="upload_flie_wrapper">
         <view class="upload_flie_tittle text-center">上传文件</view>
         <view class="upload_flie_list">
-          <view class="upload_flie_data" wx:for="{{conclusion[1]}}">
+          <view class="upload_flie_data" wx:key="{{index}}" wx:for="{{conclusion[1]}}">
             <view class="upload_flie_img_wrapper">
               <image src="/images/set_question/set_question_icon_flie.png" class="upload_flie_img"></image>
             </view>
@@ -174,8 +241,8 @@
               <view class="upload_flie_size">{{item[1]}}</view>
             </view>
             <view class="upload_flie_function">
-              <button class="upload_flie_btn upload_flie_scan" data-index="{{index}}" bindtap="onPreviewFile">查看</button>
-              <button class="upload_flie_btn upload_flie_down" data-target="conclusion" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
+              <button class="upload_flie_btn upload_flie_scan" data-index="{{index}}" data-type="conclusion" bindtap="onPreviewFile">查看</button>
+              <button wx:if="{{false}}" class="upload_flie_btn upload_flie_down" data-target="conclusion" data-index="{{index}}" bindtap="onDownloadFile">下载</button>
             </view>
           </view>
         </view>

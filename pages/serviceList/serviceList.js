@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isLoading:true,
     isNoServices: false,
     services: []
   },
@@ -23,7 +24,12 @@ Page({
         cookie: wx.getStorageSync("sessionId")
       },
       success(res) {
+        if (res.data === 403) {
+          getApp().globalData.refresh()
+          return 1
+        }
         that.setData({
+          isLoading:false,
           services: res.data
         })
       }

@@ -1,6 +1,7 @@
 let {
   serviceUrl: _serviceUrl,
-  fileUploadUrl
+  fileUploadUrl,
+  SERVICE_FILE_URL
 } = require('../../utils/config.js')
 let serviceUrl = null
 let serviceId = null
@@ -13,7 +14,8 @@ const initialData = {
   shouldViewComment: false,
   shouldViewConclusion: false,
   canMakeConclusion: false,
-  canEndService:false
+  canEndService: false,
+  isSendQuoting:false
 }
 Page({
 
@@ -24,12 +26,13 @@ Page({
    * {{payment[1]?'已支付':'修改'}}
    */
   data: {
+    isSendQuoting:false,
     shouldViewDescription: false,
     shouldViewContact: false,
     shouldViewProcessor: false,
     shouldViewComment: false,
     shouldViewConclusion: false,
-    canMakeConclusion:false,
+    canMakeConclusion: false,
     canEndService: false
   },
   onChoose(e) {
@@ -45,23 +48,36 @@ Page({
   },
   onSendQuote() {
     const that = this
-    if (this.data.sendQuoteButton === "报价") wx.request({
-      url: `${serviceUrl}/payment`,
-      method: "PUT",
-      header: {
-        cookie: wx.getStorageSync("sessionId")
-      },
-      data: {
-        fee: this.data.fee
-      },
-      success() {
-        wx.showToast({
-          title: '报价成功',
+    if (this.data.sendQuoteButton === "报价") {
+      if (parseInt(this.data.fee) && parseInt(this.data.fee) > 0) {
+        this.setData({isSendQuoting:true})
+        wx.request({
+          url: `${serviceUrl}/payment`,
+          method: "PUT",
+          header: {
+            cookie: wx.getStorageSync("sessionId")
+          },
+          data: {
+            fee: this.data.fee
+          },
+          success(res) {
+            that.setData({isSendQuoting:false})
+            if (res.data === 403) {
+              getApp().globalData.refresh()
+              return 1
+            }
+            console.log(1111)
+            wx.showToast({
+              title: '报价成功',
+            })
+            that.initial()
+          }
         })
-        that.initial()
-      }
-    })
-    else this.setData({
+      } else wx.showToast({
+        title: "报价不能为0",
+        icon: "none"
+      })
+    } else this.setData({
       sendQuoteButton: '报价'
     })
   },
@@ -73,6 +89,10 @@ Page({
         cookie: wx.getStorageSync("sessionId")
       },
       success(res) {
+        if (res.data === 403) {
+          getApp().globalData.refresh()
+          return 1
+        }
         console.log(res.data)
         const {
           data
@@ -90,12 +110,22 @@ Page({
           data.sendQuoteButton = data.payment[1] ? '已支付' : '修改'
         } else data.sendQuoteButton = '报价'
         data.isTextDescriptionType = typeof data.description === 'string'
-        that.setData({...initialData,...data})
+        that.setData({ ...initialData,
+          ...data
+        })
       }
     })
   },
   onAssignService(e) {
     const that = this
+    console.log(this.data.processorPicked)
+    if (!this.data.processorPicked) {
+      wx.showToast({
+        title: '请选择律师后操作',
+        icon: "none"
+      })
+      return 1
+    }
     if (this.data.assignServiceButton === "分配") wx.request({
       url: `${serviceUrl}/processor`,
       method: "PUT",
@@ -105,7 +135,14 @@ Page({
       data: {
         processorId: this.data.processorPicked[1]
       },
-      success() {
+      success(res) {
+        if (res.data === 403) {
+          getApp().globalData.refresh()
+          return 1
+        }
+        wx.showToast({
+          title: '分配成功',
+        })
         that.initial()
       }
     })
@@ -123,21 +160,37 @@ Page({
             })
           }
         })
+      } else {
+        that.setData({
+          assignServiceButton: '分配'
+        })
       }
     }
   },
   onPreviewFile(e) {
     console.log(e)
     const index = e.currentTarget.dataset.index
-    const type = this.data.description[index][0].slice(-4).includes(".") ? this.data.description[index][0].slice(-3) : this.data.description[index][0].slice(-4)
+    const target = e.currentTarget.dataset.type === "conclusion" ? this.data.conclusion[1] : this.data.description
+    console.log(target)
+    console.log(index)
+    /*const type = target[index][0].slice(-4).includes(".") ? target[index][0].slice(-3) : target[index][0].slice(-4)*/
+    const filename = target[index][0]
+    let type = ""
+    for (let key = filename.length - 1; key > -1; key--) {
+      if (filename[key] !== ".") type = filename[key] + type
+      else break;
+    }
     console.log(type)
-    if (["png", "jpg", "gif"].includes(type)) {
+    if (["png", "jpg", "gif", "jpeg"].includes(type)) {
       wx.previewImage({
-        urls: [`${serviceFileUrl}/${e.currentTarget.dataset.type==='conclusion'?'conclusion':'file'}/${index}`]
+        urls: [`${SERVICE_FILE_URL}?part=data&target=${e.currentTarget.dataset.type}&serviceId=${serviceId}&index=${index}`],
+        complete(res) {
+          console.log(res)
+        }
       })
     } else {
       wx.downloadFile({
-        url: `${serviceFileUrl}/file/${index}`,
+        url: `${SERVICE_FILE_URL}?part=data&target=${e.currentTarget.dataset.type}&serviceId=${serviceId}&index=${index}`,
         success(res) {
           console.log(res)
           wx.openDocument({
@@ -214,9 +267,11 @@ Page({
       }
     })
   },
-  onMakeConclusionText(e){
+  onMakeConclusionText(e) {
     console.log(e)
-    this.setData({"conclusion[0]":e.detail.value})
+    this.setData({
+      "conclusion[0]": e.detail.value
+    })
   },
   onMakeConclusion() {
     const that = this

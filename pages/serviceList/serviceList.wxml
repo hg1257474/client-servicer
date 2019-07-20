@@ -11,4 +11,5 @@
     <view class="service_state sec_info">{{item[2]}}</view>
   </navigator>
 </view>
-<view class="no-services" wx:if="{{!services.length}}">暂时无服务</view>
+<view class="no-services" wx:if="{{!isLoading&&!services.length}}">暂时无服务</view>
+<view class="no-services" wx:if="{{!services.length&&isLoading}}">加载中</view>
